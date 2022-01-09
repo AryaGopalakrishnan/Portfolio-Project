@@ -1,3 +1,6 @@
+--Data exploration
+
+
 
 select * from coviddeaths$
 where continent is not null
@@ -33,7 +36,7 @@ where continent is not null and continent like '%Europe%'
 group by location , population
 order by highestdeathcount desc;
 
---
+--Highest death cases in Europe
 select location, continent ,max(total_deaths) as highestindeath
 from coviddeaths$
 where continent like '%Europe%'
@@ -41,14 +44,16 @@ group by continent , location
 order by highestindeath desc;
 
 
-
-select sum(new_cases) as sumofnewcases, SUM(cast(new_deaths as int)) as sumofnewdeaths,location,date
+--New cases and death across Europe
+select sum(new_cases) as sumofnewcases, SUM(cast(new_deaths as int)) as sumofnewdeaths,location,date,continent
 --SUM(cast(new_deaths as int))/sum(new_cases)*100 as deathpercentage
 from coviddeaths$
-where date  between '2021-01-01' AND '2021-12-30'
-group by location , date
-order by 1,2;
+where date  between '2021-01-01' AND '2021-12-30' and continent like '%Europe%'
+group by location , date,continent
+order by 1 desc ,2 desc ;
 
+
+--Vaccination across Europe
 select dea.continent,dea.location,dea.date,dea.population,vac.new_vaccinations
 from coviddeaths$ dea 
 join covidvaccine$ vac
